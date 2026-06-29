@@ -73,7 +73,3 @@ Ini semacam checklist kasar biar kamu ada gambaran. Nggak harus urut.
 - Save pakai PlayerPrefs, ada cek versi. Kalau format save lama nggak cocok, otomatis di-reset biar game nggak error.
 - Mobil yang lagi dipajang di showroom langsung kepotong dari gudang, dan baru kebayar pas kejual. Jadi nggak mungkin satu mobil kejual dua kali.
 - Mobil balap itu beda dari mobil jualan. Mobil balap stat-nya pasti (nggak ada gacha) dan disimpen terpisah, cuma muncul di layar balapan.
-
-## Kalau ada yang bingung
-
-Kalau ada mekanik yang nggak jelas atau angkanya kerasa aneh, jangan diutak-atik sendiri di kode logika. Kabarin aku aja, nanti aku yang benerin di sisi logika. Kamu fokus aja bikin game-nya kelihatan dan kerasa enak dimainin. Makasih ya udah bantu, semoga betah.

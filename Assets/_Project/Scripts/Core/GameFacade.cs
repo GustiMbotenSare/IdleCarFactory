@@ -9,8 +9,8 @@ namespace CarFactoryIdle.Core
 {
     /// <summary>The single, stable API surface the UI calls. Every player intent (tap, buy, upgrade,
     /// sell, fulfill) goes through here so the presentation layer never reaches into systems or
-    /// mutates state directly. Unity-AI-generated views should ONLY call this class and read state +
-    /// subscribe to GameEventBus; they must not modify anything under Simulation/State/Data.
+    /// mutates state directly. UI views should ONLY call this class, read state, and subscribe to
+    /// GameEventBus; they must not modify anything under Simulation/State/Data.
     ///
     /// All purchase methods are atomic: they check affordability first and return false (raising the
     /// error channel) if the player can't pay, so no half-applied transactions.</summary>
@@ -204,7 +204,7 @@ namespace CarFactoryIdle.Core
         public bool StartRace(string carKey, int trackIndex)
         {
             bool ok = _circuit.StartRace(carKey, trackIndex);
-            if (!ok) Error("Can't start race \u2014 check your car, the entry fee, or the cooldown.");
+            if (!ok) Error("Can't start race. Check your car, the entry fee, or the cooldown.");
             else Changed();
             return ok;
         }
@@ -218,7 +218,7 @@ namespace CarFactoryIdle.Core
         public bool BuildRaceCar(string raceCarId)
         {
             bool ok = _workshop.BuildRaceCar(raceCarId);
-            if (!ok) Error("Can't build race car \u2014 check parts, cash, factory tier, or unlock the Race Agency.");
+            if (!ok) Error("Can't build race car. Check parts, cash, factory tier, or unlock the Race Agency.");
             else Changed();
             return ok;
         }

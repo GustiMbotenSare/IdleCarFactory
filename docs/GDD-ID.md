@@ -1,13 +1,9 @@
-# Car Factory Idle - GDD Santai (Bahasa Indonesia)
+# Car Factory Idle - GDD simple
 
-Halo bro. Ini bukan dokumen resmi, jadi santai aja bacanya. Anggap ini aku lagi ngejelasin game-nya ke kamu sambil ngopi. Tujuannya satu: biar kamu paham game-nya mau jadi kayak gimana, dan kamu bisa langsung gas bikin bagian Unity-nya tanpa pusing mikirin logikanya.
+## Pembagian kerja 
 
-## Pembagian kerja kita
-
-Biar jelas dari awal, ini deal-nya:
-
-- **Aku (ako)** pegang otak game-nya: logika, struktur, dan semua mekanik inti. Semua aturan main, rumus ekonomi, cara mobil dibuat dan dijual, itu udah aku tulis di kode C# dan bakal aku jaga biar stabil. Kalau ada aturan main yang berubah, itu bagianku.
-- **Kamu** pegang Unity-nya: tampilan, layar, tombol, animasi, suara, dan ngehubungin semua itu ke logika yang udah ada. Intinya kamu nggak perlu mikirin "angka ini dari mana" atau "kenapa harganya segini". Tinggal panggil fungsi yang udah aku siapin, tampilin hasilnya, dengerin event-nya.
+- **Aku** pegang otak game-nya: logika, struktur, dan semua mekanik inti. Semua aturan main, rumus ekonomi, cara mobil dibuat dan dijual, itu udah aku tulis di kode C# dan bakal aku jaga biar stabil. Kalau ada aturan main yang berubah, itu bagianku.
+- **Co-dev** pegang Unity-nya: tampilan, layar, tombol, animasi, suara, dan ngehubungin semua itu ke logika yang udah ada. Intinya kamu nggak perlu mikirin "angka ini dari mana" atau "kenapa harganya segini". Tinggal panggil fungsi yang udah aku siapin, tampilin hasilnya, dengerin event-nya.
 
 Jadi kalau bingung soal mekanik, tanya aku. Kalau soal cara nampilin di layar, itu wilayah kamu.
 
@@ -23,7 +19,7 @@ Car Factory Idle itu game idle / factory. Pemain punya pabrik mobil. Alurnya kay
 
 Target platform-nya WebGL (buat CrazyGames). Mobilnya 12 jenis, namanya sengaja dibikin mirip mobil terkenal tapi nggak nyamain merek asli biar aman.
 
-## Struktur kode (biar kamu nggak nyasar)
+## Struktur kode 
 
 Semua logika ada di `Assets/_Project/Scripts/`, kebagi jadi beberapa folder:
 
@@ -42,7 +38,7 @@ Ini bagian yang wajib kamu inget. Ada satu file namanya `GameFacade.cs`. Anggap 
 - Buat nampilin angka (duit, jumlah barang, dan lain-lain), UI tinggal baca state-nya.
 - Buat tau kapan harus update tampilan, UI dengerin event dari folder `Events/` (lewat `GameEventBus`). Contoh: ada event pas duit berubah, pas mobil kejual, pas balapan selesai, dan ada juga buat toast notifikasi.
 
-Kenapa dibikin gini? Biar logika sama tampilan kepisah rapi. Aku bisa otak-atik logika tanpa ngerusak UI kamu, dan kamu bisa rombak UI tanpa takut ngerusak mekanik. Win-win.
+Kenapa dibikin gini? Biar logika sama tampilan kepisah rapi. Aku bisa otak-atik logika tanpa ngerusak UI kamu, dan kamu bisa rombak UI tanpa takut ngerusak mekanik. 
 
 ## Sistem-sistem yang ada (dan apa kerjanya)
 
@@ -83,8 +79,5 @@ Ini semacam checklist kasar biar kamu ada gambaran. Nggak harus urut.
 - Konten game (item, stasiun, mobil, angka) dibangun langsung di kode lewat `DefaultContent.cs`. Jadi kamu nggak harus bikin file .asset satu-satu biar game-nya jalan.
 - Save pakai PlayerPrefs, ada cek versi. Kalau format save lama nggak cocok, otomatis di-reset biar game nggak error.
 - Mobil yang lagi dipajang di showroom langsung kepotong dari gudang, dan baru kebayar pas kejual. Jadi nggak mungkin satu mobil kejual dua kali.
-- Kalau mau versi lengkap dan rapi (bahasa Inggris, lebih formal), ada di `docs/GDD.md`. Yang ini versi santai, itu versi detailnya.
+- Kalau mau versi lengkap, ada di `docs/GDD.md`. 
 
-## Kalau ada yang bingung
-
-Kalau ada mekanik yang nggak jelas atau angkanya kerasa aneh, jangan diutak-atik sendiri di kode logika. Kabarin aku aja, nanti aku yang benerin di sisi logika. Kamu fokus aja bikin game-nya kelihatan dan kerasa enak dimainin. Makasih ya udah bantu, semoga betah.

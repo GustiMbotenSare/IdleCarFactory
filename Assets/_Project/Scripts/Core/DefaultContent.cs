@@ -4,10 +4,10 @@ using CarFactoryIdle.Data;
 
 namespace CarFactoryIdle.Core
 {
-    /// <summary>Builds the entire GameConfig in code from the locked Godot-prototype values
-    /// (claude_answers.md + corrected base prices). This makes the game runnable with zero authored
-    /// .asset files. Use the editor menu \"CFI/Generate Default Content Assets\" to bake these into
-    /// real ScriptableObjects when you want to tune them in the inspector.</summary>
+    /// <summary>Builds the entire GameConfig in code from the locked prototype values. This makes
+    /// the game runnable with zero authored .asset files. Use the editor menu
+    /// "CFI/Generate Default Content Assets" to bake these into real ScriptableObjects when you
+    /// want to tune them in the inspector.</summary>
     public static class DefaultContent
     {
         public static GameConfig BuildConfig()
@@ -35,34 +35,35 @@ namespace CarFactoryIdle.Core
 
         private static void BuildItems(GameConfig cfg)
         {
-            // PRODUCTION MODEL v2 (antigravity-backend-spec.md §1-3). Item `tier` for materials
-            // mirrors the extraction unlock tier (T1: steel/rubber/copper; T2: aluminum/silicon; T3: carbon).
+            // Production model v2. Item `tier` for materials mirrors the extraction unlock tier
+            // (T1: steel/rubber/copper; T2: aluminum/silicon; T3: carbon). The `icon` field is left
+            // blank on purpose: the Unity developer assigns real sprites/icons in the inspector.
             cfg.items = new List<ItemDefinition>
             {
                 // --- Materials (6) ---
-                Item("steel",    "Steel",    "\u26CF\uFE0F",      ItemKind.Raw, 1),
-                Item("rubber",   "Rubber",   "\uD83D\uDEDE",      ItemKind.Raw, 1),
-                Item("copper",   "Copper",   "\uD83D\uDFE4",      ItemKind.Raw, 1),
-                Item("aluminum", "Aluminum", "\u26AA",            ItemKind.Raw, 2),
-                Item("silicon",  "Silicon",  "\uD83D\uDCA1",      ItemKind.Raw, 2),
-                Item("carbon",   "Carbon",   "\u26AB",            ItemKind.Raw, 3),
+                Item("steel",    "Steel",    "", ItemKind.Raw, 1),
+                Item("rubber",   "Rubber",   "", ItemKind.Raw, 1),
+                Item("copper",   "Copper",   "", ItemKind.Raw, 1),
+                Item("aluminum", "Aluminum", "", ItemKind.Raw, 2),
+                Item("silicon",  "Silicon",  "", ItemKind.Raw, 2),
+                Item("carbon",   "Carbon",   "", ItemKind.Raw, 3),
 
                 // --- Engines (3) ---
-                Item("engineV4", "V4 Engine", "\u2699\uFE0F", ItemKind.Component, 1),
-                Item("engineV6", "V6 Engine", "\u2699\uFE0F", ItemKind.Component, 2),
-                Item("engineV8", "V8 Engine", "\u2699\uFE0F", ItemKind.Component, 3),
+                Item("engineV4", "V4 Engine", "", ItemKind.Component, 1),
+                Item("engineV6", "V6 Engine", "", ItemKind.Component, 2),
+                Item("engineV8", "V8 Engine", "", ItemKind.Component, 3),
                 // --- Chassis (3) ---
-                Item("chassisSteel",    "Steel Chassis",    "\uD83C\uDFD7\uFE0F", ItemKind.Component, 1),
-                Item("chassisAluminum", "Aluminum Chassis", "\uD83C\uDFD7\uFE0F", ItemKind.Component, 2),
-                Item("chassisCarbon",   "Carbon Chassis",   "\uD83C\uDFD7\uFE0F", ItemKind.Component, 3),
+                Item("chassisSteel",    "Steel Chassis",    "", ItemKind.Component, 1),
+                Item("chassisAluminum", "Aluminum Chassis", "", ItemKind.Component, 2),
+                Item("chassisCarbon",   "Carbon Chassis",   "", ItemKind.Component, 3),
                 // --- Wheels (3) ---
-                Item("wheelStandard",    "Standard Wheels",    "\uD83D\uDEDE", ItemKind.Component, 1),
-                Item("wheelPerformance", "Performance Wheels", "\uD83D\uDEDE", ItemKind.Component, 2),
-                Item("wheelHyper",       "Hyper Wheels",       "\uD83D\uDEDE", ItemKind.Component, 3),
+                Item("wheelStandard",    "Standard Wheels",    "", ItemKind.Component, 1),
+                Item("wheelPerformance", "Performance Wheels", "", ItemKind.Component, 2),
+                Item("wheelHyper",       "Hyper Wheels",       "", ItemKind.Component, 3),
                 // --- Wiring (3) ---
-                Item("wiringStandard", "Standard Wiring", "\uD83D\uDCA1", ItemKind.Component, 1),
-                Item("wiringAdvanced", "Advanced Wiring", "\uD83D\uDCA1", ItemKind.Component, 2),
-                Item("wiringPremium",  "Premium Wiring",  "\uD83D\uDCA1", ItemKind.Component, 3),
+                Item("wiringStandard", "Standard Wiring", "", ItemKind.Component, 1),
+                Item("wiringAdvanced", "Advanced Wiring", "", ItemKind.Component, 2),
+                Item("wiringPremium",  "Premium Wiring",  "", ItemKind.Component, 3),
             };
         }
 
@@ -90,7 +91,7 @@ namespace CarFactoryIdle.Core
         {
             cfg.stations = new List<StationDefinition>
             {
-                // --- Extraction (6), one material each. Tier gating per spec §2:
+                // --- Extraction (6), one material each. Tier gating:
                 //     T1 (steel/rubber/copper) free; T2 (aluminum/silicon) & T3 (carbon) unlock-gated.
                 // baseOutput tuned so supply/s = baseOutput/interval >= ~1.2x each material's PEAK
                 // demand across all chains (peaks: steel 2.5 @T1, rubber 1.0 @T1, copper 1.143 @T3,
@@ -102,25 +103,25 @@ namespace CarFactoryIdle.Core
                 Station("siliconQuarry",     "Silicon Quarry",     StationCategory.Extractor, 2, null, "silicon",  2.5f, 1500, false, 8000, 3), // 1.20/s (1.40x)
                 Station("carbonFiberLab",    "Carbon-Fiber Lab",   StationCategory.Extractor, 3, null, "carbon",   3.0f, 6000, false, 80000, 6), // 2.00/s (1.43x)
 
-                // --- Crafting (4 families x 3 tiers). v2 recipes consume RAW MATERIALS ONLY (spec §3).
+                // --- Crafting (4 families x 3 tiers). v2 recipes consume RAW MATERIALS ONLY.
                 //     Kept as one station per tiered output (the simulation keys production off a fixed
                 //     outputItemId; SimSmokeTest derives a vehicle's chain from these outputs).
                 // Engine Plant: V4={Steel} V6={Steel,Aluminum} V8={Steel,Aluminum,Carbon}
-                Station("enginePlantV4", "Engine Plant \u2014 V4", StationCategory.Manufacturing, 1, Costs(("steel",5)),                        "engineV4", 4.0f, 1500,  true,  0),
-                Station("enginePlantV6", "Engine Plant \u2014 V6", StationCategory.Manufacturing, 2, Costs(("steel",3),("aluminum",3)),         "engineV6", 5.0f, 5000,  false, 10000),
-                Station("enginePlantV8", "Engine Plant \u2014 V8", StationCategory.Manufacturing, 3, Costs(("steel",4),("aluminum",3),("carbon",2)), "engineV8", 6.0f, 20000, false, 100000),
+                Station("enginePlantV4", "Engine Plant - V4", StationCategory.Manufacturing, 1, Costs(("steel",5)),                        "engineV4", 4.0f, 1500,  true,  0),
+                Station("enginePlantV6", "Engine Plant - V6", StationCategory.Manufacturing, 2, Costs(("steel",3),("aluminum",3)),         "engineV6", 5.0f, 5000,  false, 10000),
+                Station("enginePlantV8", "Engine Plant - V8", StationCategory.Manufacturing, 3, Costs(("steel",4),("aluminum",3),("carbon",2)), "engineV8", 6.0f, 20000, false, 100000),
                 // Chassis Shop: Steel={Steel} Aluminum={Aluminum} Carbon={Carbon}
-                Station("chassisShopSteel",    "Chassis Shop \u2014 Steel",    StationCategory.Manufacturing, 1, Costs(("steel",5)),    "chassisSteel",    4.0f, 1500,  true,  0),
-                Station("chassisShopAluminum", "Chassis Shop \u2014 Aluminum", StationCategory.Manufacturing, 2, Costs(("aluminum",5)), "chassisAluminum", 5.0f, 5000,  false, 10000),
-                Station("chassisShopCarbon",   "Chassis Shop \u2014 Carbon",   StationCategory.Manufacturing, 3, Costs(("carbon",4)),   "chassisCarbon",   6.0f, 20000, false, 100000),
+                Station("chassisShopSteel",    "Chassis Shop - Steel",    StationCategory.Manufacturing, 1, Costs(("steel",5)),    "chassisSteel",    4.0f, 1500,  true,  0),
+                Station("chassisShopAluminum", "Chassis Shop - Aluminum", StationCategory.Manufacturing, 2, Costs(("aluminum",5)), "chassisAluminum", 5.0f, 5000,  false, 10000),
+                Station("chassisShopCarbon",   "Chassis Shop - Carbon",   StationCategory.Manufacturing, 3, Costs(("carbon",4)),   "chassisCarbon",   6.0f, 20000, false, 100000),
                 // Wheel Factory: Standard={Rubber} Performance={Rubber,Aluminum} Hyper={Rubber,Carbon}
-                Station("wheelFactoryStandard",    "Wheel Factory \u2014 Standard",    StationCategory.Manufacturing, 1, Costs(("rubber",3)),               "wheelStandard",    3.0f, 1200,  true,  0),
-                Station("wheelFactoryPerformance", "Wheel Factory \u2014 Performance", StationCategory.Manufacturing, 2, Costs(("rubber",3),("aluminum",2)), "wheelPerformance", 4.0f, 4000,  false, 8000),
-                Station("wheelFactoryHyper",       "Wheel Factory \u2014 Hyper",       StationCategory.Manufacturing, 3, Costs(("rubber",4),("carbon",2)),   "wheelHyper",       5.0f, 15000, false, 80000),
+                Station("wheelFactoryStandard",    "Wheel Factory - Standard",    StationCategory.Manufacturing, 1, Costs(("rubber",3)),               "wheelStandard",    3.0f, 1200,  true,  0),
+                Station("wheelFactoryPerformance", "Wheel Factory - Performance", StationCategory.Manufacturing, 2, Costs(("rubber",3),("aluminum",2)), "wheelPerformance", 4.0f, 4000,  false, 8000),
+                Station("wheelFactoryHyper",       "Wheel Factory - Hyper",       StationCategory.Manufacturing, 3, Costs(("rubber",4),("carbon",2)),   "wheelHyper",       5.0f, 15000, false, 80000),
                 // Electronics Lab: Standard={Copper} Advanced={Copper,Silicon} Premium={Copper x2,Silicon x2}
-                Station("electronicsLabStandard", "Electronics Lab \u2014 Standard", StationCategory.Manufacturing, 1, Costs(("copper",4)),               "wiringStandard", 5.0f, 1800,  true,  0),
-                Station("electronicsLabAdvanced", "Electronics Lab \u2014 Advanced", StationCategory.Manufacturing, 2, Costs(("copper",4),("silicon",3)),  "wiringAdvanced", 6.0f, 6000,  false, 12000),
-                Station("electronicsLabPremium",  "Electronics Lab \u2014 Premium",  StationCategory.Manufacturing, 3, Costs(("copper",8),("silicon",6)),  "wiringPremium",  7.0f, 25000, false, 120000),
+                Station("electronicsLabStandard", "Electronics Lab - Standard", StationCategory.Manufacturing, 1, Costs(("copper",4)),               "wiringStandard", 5.0f, 1800,  true,  0),
+                Station("electronicsLabAdvanced", "Electronics Lab - Advanced", StationCategory.Manufacturing, 2, Costs(("copper",4),("silicon",3)),  "wiringAdvanced", 6.0f, 6000,  false, 12000),
+                Station("electronicsLabPremium",  "Electronics Lab - Premium",  StationCategory.Manufacturing, 3, Costs(("copper",8),("silicon",6)),  "wiringPremium",  7.0f, 25000, false, 120000),
 
                 // Assembly stations, one per vehicle tier. Builds the selected vehicle's recipe.
                 Station("assemblyTier1", "Assembly Line I",   StationCategory.Assembly, 1, null, null, 6.0f, 3500,   true,  0),
@@ -148,17 +149,17 @@ namespace CarFactoryIdle.Core
 
         private static void BuildVehicles(GameConfig cfg)
         {
-            // Base prices corrected to match the Godot production economy (2026-06-18).
+            // Base prices match the production economy (2026-06-18).
             cfg.vehicles = new List<VehicleDefinition>
             {
-                // Tier 1: engineV4 + chassisSteel + 4×wheelStandard + wiringStandard
+                // Tier 1: engineV4 + chassisSteel + 4x wheelStandard + wiringStandard
                 Vehicle("tokyoCommuter",  "Tokyo Commuter",   1, 800,    RS(10,8,8,8),     Costs(("engineV4",1),("chassisSteel",1),("wheelStandard",4),("wiringStandard",1))),
                 Vehicle("tokyoTrekker",   "Tokyo Trekker",    1, 1200,   RS(12,9,10,8),    Costs(("engineV4",1),("chassisSteel",1),("wheelStandard",4),("wiringStandard",2))),
-                // Tier 2: engineV6 + chassisAluminum + 4×wheelPerformance + wiringAdvanced
+                // Tier 2: engineV6 + chassisAluminum + 4x wheelPerformance + wiringAdvanced
                 Vehicle("hiroshimaBreeze","Hiroshima Breeze", 2, 3500,   RS(24,22,20,18),  Costs(("engineV6",1),("chassisAluminum",1),("wheelPerformance",4),("wiringAdvanced",1))),
                 Vehicle("bavarianSeries3","Bavarian Series 3",2, 4500,   RS(20,18,16,16),  Costs(("engineV6",1),("chassisAluminum",1),("wheelPerformance",4),("wiringAdvanced",1))),
                 Vehicle("britanniaRover", "Britannia Rover",  2, 6000,   RS(22,16,18,16),  Costs(("engineV6",1),("chassisAluminum",2),("wheelPerformance",4),("wiringAdvanced",1))),
-                // Tier 3: engineV8 + chassisCarbon + 4×wheelHyper + wiringPremium
+                // Tier 3: engineV8 + chassisCarbon + 4x wheelHyper + wiringPremium
                 Vehicle("stuttgartSClass","Stuttgart S-Class",3, 18000,  RS(30,26,24,24),  Costs(("engineV8",1),("chassisCarbon",1),("wheelHyper",4),("wiringPremium",2))),
                 Vehicle("stuttgartGBox",  "Stuttgart G-Box",  3, 25000,  RS(28,24,26,22),  Costs(("engineV8",1),("chassisCarbon",2),("wheelHyper",4),("wiringPremium",2))),
                 Vehicle("autobahn911",    "Autobahn 911",     3, 30000,  RS(40,38,34,34),  Costs(("engineV8",1),("chassisCarbon",1),("wheelHyper",4),("wiringPremium",2))),
@@ -241,8 +242,8 @@ namespace CarFactoryIdle.Core
 
         private static void BuildContracts(GameConfig cfg)
         {
-            // Values from claude_answers #5. Premium pays trophies (per the answer table);
-            // VIP simplified to single-vehicle. Both flagged TODO if multi-type VIP is desired.
+            // Premium pays trophies instead of cash. VIP is simplified to a single vehicle for now;
+            // revisit if a multi-vehicle VIP contract is wanted later.
             cfg.contractTypes = new List<ContractTypeDefinition>
             {
                 Contract(ContractType.Standard, "Standard Sale", 1, 1, 3, 1, 1.5f, 0, 0, 0, 0, 0),

@@ -1,13 +1,11 @@
-# Car Factory Idle - GDD Santai (Bahasa Indonesia)
+# Car Factory Idle - GDD Simpel
 
-Halo bro. Ini bukan dokumen resmi, jadi santai aja bacanya. Anggap ini aku lagi ngejelasin game-nya ke kamu sambil ngopi. Tujuannya satu: biar kamu paham game-nya mau jadi kayak gimana, dan kamu bisa langsung gas bikin bagian Unity-nya tanpa pusing mikirin logikanya.
-
-## Pembagian kerja kita
+## Pembagian kerja
 
 Biar jelas dari awal, ini deal-nya:
 
-- **Aku (ako)** pegang otak game-nya: logika, struktur, dan semua mekanik inti. Semua aturan main, rumus ekonomi, cara mobil dibuat dan dijual, itu udah aku tulis di kode C# dan bakal aku jaga biar stabil. Kalau ada aturan main yang berubah, itu bagianku.
-- **Kamu** pegang Unity-nya: tampilan, layar, tombol, animasi, suara, dan ngehubungin semua itu ke logika yang udah ada. Intinya kamu nggak perlu mikirin "angka ini dari mana" atau "kenapa harganya segini". Tinggal panggil fungsi yang udah aku siapin, tampilin hasilnya, dengerin event-nya.
+- **Aku** pegang otak game-nya: logika, struktur, dan semua mekanik inti. Semua aturan main, rumus ekonomi, cara mobil dibuat dan dijual, itu udah aku tulis di kode C# dan bakal aku jaga biar stabil. Kalau ada aturan main yang berubah, itu bagianku.
+- **co-dev** pegang Unity-nya: tampilan, layar, tombol, animasi, suara, dan ngehubungin semua itu ke logika yang udah ada. Intinya kamu nggak perlu mikirin "angka ini dari mana" atau "kenapa harganya segini". Tinggal panggil fungsi yang udah aku siapin, tampilin hasilnya, dengerin event-nya.
 
 Jadi kalau bingung soal mekanik, tanya aku. Kalau soal cara nampilin di layar, itu wilayah kamu.
 

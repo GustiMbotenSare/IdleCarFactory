@@ -9,11 +9,11 @@ namespace CarFactoryIdle.Core
 {
     /// <summary>Phase 1 deliverable: proves raw -> parts -> graded car -> auction -> cash works
     /// deterministically without any UI. Drop on an empty GameObject and press Play, or right-click
-    /// the component and choose \"Run Headless Sim\".
+    /// the component and choose "Run Headless Sim".
     ///
     /// IMPORTANT: it only automates the stations in the SELECTED vehicle's dependency chain (plus its
     /// matching assembly line + sales). Automating the WHOLE factory starves a tier-1 car, because the
-    /// V6/V8 plants and Alloy/Carbon weavers eat the basic engines & steel chassis the assembly needs.</summary>
+    /// V6/V8 plants and Alloy/Carbon weavers eat the basic engines and steel chassis the assembly needs.</summary>
     public class SimSmokeTest : MonoBehaviour
     {
         [Tooltip("Which vehicle to build. Its supply chain is auto-enabled.")]
@@ -22,7 +22,7 @@ namespace CarFactoryIdle.Core
         public int simulatedSeconds = 180;
         [Tooltip("Simulation step size. Smaller = more accurate, slower.")]
         public float stepDt = 0.1f;
-        [Tooltip("Fixed seed -> identical run every time. Change for variety.")]
+        [Tooltip("Fixed seed = identical run every time. Change for variety.")]
         public int randomSeed = 12345;
         [Tooltip("Auto-list assembled cars on the auction so we can watch cash come in.")]
         public bool autoSellCars = true;
@@ -80,7 +80,7 @@ namespace CarFactoryIdle.Core
             foreach (var kv in state.inventory.All)
                 if (kv.Value > 0 && CarKey.TryParse(kv.Key, out _, out _))
                 { sb.AppendLine($"  {kv.Key}: {kv.Value}"); anyCar = true; }
-            if (!anyCar) sb.AppendLine("  (none yet \u2014 try more simulatedSeconds or add a 2nd extractor)");
+            if (!anyCar) sb.AppendLine("  (none yet. Try more simulatedSeconds or add a second extractor.)");
             return sb.ToString();
         }
 

@@ -6,9 +6,9 @@ namespace CarFactoryIdle.Core
 {
     /// <summary>Central, display-only number formatter. Logic always keeps raw values; only labels
     /// route through here. Honors the player's "short notation" preference (Settings toggle):
-    /// SHORT → abbreviated (1.2M), FULL → comma-grouped (1,200,000). Abbreviation rule: values below
-    /// 1000 are shown plain; from there K/M/B/T with at most one decimal, trailing ".0" dropped
-    /// (12K, not 12.0K). Negatives and zero are handled.</summary>
+    /// SHORT gives abbreviated (1.2M), FULL gives comma-grouped (1,200,000). Abbreviation rule:
+    /// values below 1000 are shown plain; from there K/M/B/T with at most one decimal, trailing
+    /// ".0" dropped (12K, not 12.0K). Negatives and zero are handled.</summary>
     public static class NumberFormat
     {
         // Same PlayerPrefs key SettingsView writes, kept local so Core has no dependency on UI.
@@ -28,8 +28,9 @@ namespace CarFactoryIdle.Core
         /// <summary>Comma-grouped full form, e.g. 1,200,000.</summary>
         public static string Full(long value) => value.ToString("n0", CultureInfo.InvariantCulture);
 
-        /// <summary>Abbreviated form: &lt;1000 plain; then K/M/B/T with up to one decimal (trailing
-        /// .0 dropped). Truncates rather than rounds so a value never visually rolls past its tier.</summary>
+        /// <summary>Abbreviated form: values below 1000 plain; then K/M/B/T with up to one decimal
+        /// (trailing .0 dropped). Truncates rather than rounds so a value never visually rolls past
+        /// its tier.</summary>
         public static string Abbrev(long value)
         {
             if (value == long.MinValue) return Full(value); // can't negate safely; fall back

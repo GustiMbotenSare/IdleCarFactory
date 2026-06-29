@@ -1,63 +1,72 @@
-# Idle Car Factory — Core Logic
+# Idle Car Factory - Core Logic
 
-Pure C# gameplay systems for an idle car factory game built in Unity.  
-**No assets, no UI, no scenes** — just the core game mechanics.
+This repo holds the pure C# gameplay logic for an idle car factory game made in Unity.
 
-## Architecture
+There are no assets, no UI, no scenes in here. Just the brains of the game: how production works, how cars get built and sold, how the economy scales, and how progress is saved. The idea is that the logic lives here and stays stable, while the Unity side (visuals, screens, audio) gets built on top of it.
+
+## How the folders are laid out
 
 ```
 Assets/_Project/Scripts/
-├── Core/           — Bootstrap, Facade API, Save System, Content Builder
-├── Data/           — Definitions: items, stations, vehicles, economy, gacha
-├── Events/         — Event bus (decouples logic from presentation)
-├── Simulation/     — Tick systems: production, assembly, auction, showroom, race
-└── State/          — Serializable save data: inventory, wallet, stations, contracts
+  Core/         Bootstrap, the Facade API, save system, and the in-code content builder
+  Data/         Definitions and config: items, stations, vehicles, economy, gacha
+  Events/       The event bus that keeps logic separate from the UI
+  Simulation/   The tick systems: production, assembly, auction, showroom, racing
+  State/        Serializable save data: inventory, wallet, stations, contracts
+  Platform/     Stubs for CrazyGames ads and WebGL save flushing (wire these up in Unity)
 ```
 
-## Game Loop
+## The core game loop
 
-```
-Extract raw materials (6 types)
-    → Craft tiered parts (4 categories × 3 tiers)
-        → Assemble graded cars (12 vehicles × 6 grades)
-            → Sell via Showroom / Auction / Contracts
-                → Earn cash → Upgrade factory → Unlock higher tiers
-```
+1. Extract raw materials (6 types).
+2. Craft tiered parts (4 categories, 3 tiers each).
+3. Assemble graded cars (12 vehicles, 6 gacha grades).
+4. Sell them through the Showroom, the Auction, or Contracts.
+5. Earn cash, upgrade the factory, unlock higher tiers, and repeat.
 
-## Key Systems
+## The main systems
 
-| System | File | Description |
-|--------|------|-------------|
-| Production | `ProductionSystem.cs` | Ticks extractors + manufacturing stations |
-| Assembly | `AssemblySystem.cs` | Builds cars from parts, rolls gacha grade |
-| Auction | `AuctionSystem.cs` | Bid escalation + settlement |
-| Showroom | `ShowroomSystem.cs` | Display slots, walk-in visitors, offers |
-| Contracts | `ContractSystem.cs` | Generate & fulfill bulk/rush/VIP orders |
-| Racing | `CircuitRaceSystem.cs` | Circuit races with traction/speed simulation |
-| Offline | `OfflineService.cs` | Fast-forward pipeline for offline progress |
-| Economy | `Economy.cs` | All cost/scaling formulas |
-| Gacha | `GachaRoller.cs` | Grade probability (D → S+) |
+| System | File | What it does |
+|--------|------|--------------|
+| Production | `ProductionSystem.cs` | Ticks the extractor and manufacturing stations |
+| Assembly | `AssemblySystem.cs` | Builds cars from parts and rolls the gacha grade |
+| Auction | `AuctionSystem.cs` | Runs the 30 second bidding loop and pays out |
+| Showroom | `ShowroomSystem.cs` | Display slots, walk-in visitors, and offers |
+| Contracts | `ContractSystem.cs` | Generates and fulfills bulk, rush, and VIP orders |
+| Racing | `CircuitRaceSystem.cs` | Circuit races based on car stats (no real physics) |
+| Offline | `OfflineService.cs` | Fast-forwards the pipeline for offline earnings |
+| Economy | `Economy.cs` | Every cost and scaling formula |
+| Gacha | `GachaRoller.cs` | Grade probability, from D up to S+ |
 
-## Data Flow
+## How the pieces fit together
 
-- **`DefaultContent.cs`** builds the entire `GameConfig` in code (no .asset files needed)
-- **`GameRoot.cs`** bootstraps all systems and ticks them each frame
-- **`GameFacade.cs`** is the single API surface — UI calls this, never mutates state directly
-- **`SaveSystem.cs`** handles JSON save/load via PlayerPrefs with version guarding
-- **`SimSmokeTest.cs`** proves the full pipeline works headless (no UI required)
+- `DefaultContent.cs` builds the whole `GameConfig` in code, so you do not need any .asset files to run it.
+- `GameRoot.cs` boots every system and ticks them each frame.
+- `GameFacade.cs` is the one and only API the UI talks to. The UI calls the Facade, reads state, and listens for events. It never changes state on its own.
+- `SaveSystem.cs` saves and loads JSON through PlayerPrefs, with a version check so old saves do not break the game.
+- `SimSmokeTest.cs` runs the full pipeline with no UI, just to prove the logic works on its own.
 
-## Production Model (v2)
+## Production model (v2)
 
-**6 Raw Materials:** Steel, Aluminum, Rubber, Copper, Silicon, Carbon  
-**4 Part Categories × 3 Tiers:**
-- Engine: V4 → V6 → V8
-- Chassis: Steel → Aluminum → Carbon
-- Wheels: Standard → Performance → Hyper
-- Wiring: Standard → Advanced → Premium
+6 raw materials: Steel, Aluminum, Rubber, Copper, Silicon, Carbon.
 
-**12 Vehicles across 4 tiers** + 3 dedicated race cars.
+4 part categories, 3 tiers each:
+
+- Engine: V4, then V6, then V8
+- Chassis: Steel, then Aluminum, then Carbon
+- Wheels: Standard, then Performance, then Hyper
+- Wiring: Standard, then Advanced, then Premium
+
+12 vehicles across 4 factory tiers, plus 3 dedicated race cars.
+
+## What the Unity developer needs to know
+
+- The logic is UI-agnostic. Build your screens against `GameFacade` and subscribe to the channels in `Events/`.
+- Item and station icons are intentionally left blank in `DefaultContent.cs`. Assign real sprites on the Unity side.
+- The files in `Platform/` (`CrazyAds.cs` and `WebGlSync.cs`) are stubs. They compile and run as no-ops so the game works in the editor. Replace their bodies with the real CrazyGames SDK and WebGL save calls when you set up the build.
+- There is a casual design doc written in Indonesian at `docs/GDD-ID.md` that explains the game and who owns what.
 
 ## Requirements
 
-- Unity 2022.3+ (LTS)
-- No external packages required for core logic
+- Unity 2022.3 LTS or newer
+- No external packages needed for the core logic

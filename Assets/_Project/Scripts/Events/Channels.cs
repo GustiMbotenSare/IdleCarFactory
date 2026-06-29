@@ -54,7 +54,7 @@ namespace CarFactoryIdle.Events
         {
             carSold?.Raise(e);
             string msg = e.ViaAuction
-                ? $"Auction won \u2014 sold for {CarFactoryIdle.Core.NumberFormat.Currency(e.Amount)}"
+                ? $"Auction won, sold for {CarFactoryIdle.Core.NumberFormat.Currency(e.Amount)}"
                 : $"Car sold for {CarFactoryIdle.Core.NumberFormat.Currency(e.Amount)}";
             toastRequested?.Raise(new ToastEvent(msg, ToastKind.Success));
         }

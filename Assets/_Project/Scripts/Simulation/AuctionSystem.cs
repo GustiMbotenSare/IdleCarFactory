@@ -7,7 +7,7 @@ namespace CarFactoryIdle.Simulation
 {
     /// <summary>30-second auction loop. NPC bids arrive every 3-7s and bump the price by
     /// +5% to +20% compounding; auto-accepts the highest bid at 0s. Instant Sell pays the
-    /// graded base (the floor) immediately. (claude_answers #4)</summary>
+    /// graded base (the floor) immediately.</summary>
     public class AuctionSystem
     {
         public const float AuctionDuration = 30f;

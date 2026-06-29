@@ -5,8 +5,9 @@ using CarFactoryIdle.State;
 
 namespace CarFactoryIdle.Simulation
 {
-    /// <summary>Drag race resolution (Phase 10 wiring pending UI). Encodes the locked race specs:
-    /// 402m track, 180s cooldown, launch quality bonus, tier-scaled AI, reward formulas. (answers #8)</summary>
+    /// <summary>Legacy drag-race resolution. Encodes the locked race specs: 402m track, 180s
+    /// cooldown, launch quality bonus, tier-scaled AI, and reward formulas. The live game uses the
+    /// circuit races in CircuitRaceSystem; this single-shot model is kept for reference and reuse.</summary>
     public class RaceSystem
     {
         public const float TrackMeters = 402f;
@@ -42,7 +43,7 @@ namespace CarFactoryIdle.Simulation
         };
 
         /// <summary>Resolves a race using a graded car the player owns. Consumes nothing (the car
-        /// races, it isn't destroyed). Rewards per answers #8.</summary>
+        /// races, it isn't destroyed).</summary>
         public RaceResultEvent Resolve(string carKey, RaceLaunch launch, bool perfectLaunch)
         {
             int tier = _state.factoryTierIndex + 1;

@@ -3,7 +3,7 @@ using System;
 namespace CarFactoryIdle.Data
 {
     /// <summary>Central, designer-confirmed economy formulas. Pure functions, no state.
-    /// Values locked from the Godot prototype data tables (see claude_answers #6/#7).</summary>
+    /// Values locked from the Godot prototype data tables.</summary>
     public static class Economy
     {
         public const int MaxSpeedLevel = 25;

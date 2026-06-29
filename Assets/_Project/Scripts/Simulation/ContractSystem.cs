@@ -7,7 +7,7 @@ using CarFactoryIdle.State;
 namespace CarFactoryIdle.Simulation
 {
     /// <summary>Rolls up to 5 contracts, refreshing every 120s; max 3 active. Quantities, payouts,
-    /// timers and trophy rewards scale with factory tier per ContractTypeDefinition. (answers #5)</summary>
+    /// timers and trophy rewards scale with factory tier per ContractTypeDefinition.</summary>
     public class ContractSystem
     {
         public const float RefreshSeconds = 120f;
@@ -119,7 +119,7 @@ namespace CarFactoryIdle.Simulation
             _state.contracts.RemoveAt(contractIndex);
 
             string reward = c.cashReward > 0 ? $"+{CarFactoryIdle.Core.NumberFormat.Currency(c.cashReward)}" : "";
-            if (c.trophyReward > 0) reward += (reward.Length > 0 ? "  " : "") + $"+{c.trophyReward} \U0001F3C6";
+            if (c.trophyReward > 0) reward += (reward.Length > 0 ? "  " : "") + $"+{c.trophyReward} trophies";
             _bus?.Toast($"Contract complete! {reward}".TrimEnd(), Events.ToastKind.Success);
             return true;
         }

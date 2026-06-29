@@ -5,8 +5,8 @@ using CarFactoryIdle.State;
 namespace CarFactoryIdle.Simulation
 {
     /// <summary>The dedicated race-car production line. Unlike the gacha assembly line, race cars are
-    /// engineered to FIXED (no-RNG) race stats: you spend top-tier parts + cash and get exactly the
-    /// car on the spec sheet \u2014 no grade roll. Gated behind the Race Agency and a matching factory
+    /// engineered to FIXED (no-RNG) race stats: you spend top-tier parts and cash and get exactly the
+    /// car on the spec sheet, with no grade roll. Gated behind the Race Agency and a matching factory
     /// tier. Built on demand (no timer) and stored in inventory under their raw id (no "_grade"
     /// suffix) so they stay separate from showroom stock and only appear in the Race screen.
     ///
@@ -35,8 +35,8 @@ namespace CarFactoryIdle.Simulation
             return true;
         }
 
-        /// <summary>Builds one race car. Checks EVERYTHING before charging (no half-spent builds, and
-        /// no "wait for a timer just to be told you can't afford it"). Returns false if blocked.</summary>
+        /// <summary>Builds one race car. Checks everything before charging (no half-spent builds, and
+        /// no waiting for a timer just to be told you can't afford it). Returns false if blocked.</summary>
         public bool BuildRaceCar(string raceCarId)
         {
             var rc = _cfg.GetRaceCar(raceCarId);

@@ -5,11 +5,10 @@ using CarFactoryIdle.State;
 namespace CarFactoryIdle.Simulation
 {
     /// <summary>Fast-forwards the full pipeline on load. Runs extractors, then manufacturing +
-    /// assembly (which DO roll Gacha). Cap 4h, 25% efficiency, 200/raw extractor cap. No auto-sell.
-    /// (claude_answers #9)</summary>
+    /// assembly (which DO roll Gacha). Cap 8h, 25% efficiency, 200/raw extractor cap. No auto-sell.</summary>
     public class OfflineService
     {
-        public const float MaxOfflineSeconds = 28800f; // 8 hours (was 4h; raised per design request)
+        public const float MaxOfflineSeconds = 28800f; // 8 hours
         public const float Efficiency = 0.25f;          // 25% rate
         public const long ExtractorCapPerType = 200;
 

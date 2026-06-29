@@ -1,11 +1,13 @@
-# Car Factory Idle - GDD Simpel
+# Car Factory Idle - GDD Santai (Bahasa Indonesia)
 
-## Pembagian kerja
+Halo bro. Ini bukan dokumen resmi, jadi santai aja bacanya. Anggap ini aku lagi ngejelasin game-nya ke kamu sambil ngopi. Tujuannya satu: biar kamu paham game-nya mau jadi kayak gimana, dan kamu bisa langsung gas bikin bagian Unity-nya tanpa pusing mikirin logikanya.
+
+## Pembagian kerja kita
 
 Biar jelas dari awal, ini deal-nya:
 
-- **Aku** pegang otak game-nya: logika, struktur, dan semua mekanik inti. Semua aturan main, rumus ekonomi, cara mobil dibuat dan dijual, itu udah aku tulis di kode C# dan bakal aku jaga biar stabil. Kalau ada aturan main yang berubah, itu bagianku.
-- **co-dev** pegang Unity-nya: tampilan, layar, tombol, animasi, suara, dan ngehubungin semua itu ke logika yang udah ada. Intinya kamu nggak perlu mikirin "angka ini dari mana" atau "kenapa harganya segini". Tinggal panggil fungsi yang udah aku siapin, tampilin hasilnya, dengerin event-nya.
+- **Aku (ako)** pegang otak game-nya: logika, struktur, dan semua mekanik inti. Semua aturan main, rumus ekonomi, cara mobil dibuat dan dijual, itu udah aku tulis di kode C# dan bakal aku jaga biar stabil. Kalau ada aturan main yang berubah, itu bagianku.
+- **Kamu** pegang Unity-nya: tampilan, layar, tombol, animasi, suara, dan ngehubungin semua itu ke logika yang udah ada. Intinya kamu nggak perlu mikirin "angka ini dari mana" atau "kenapa harganya segini". Tinggal panggil fungsi yang udah aku siapin, tampilin hasilnya, dengerin event-nya.
 
 Jadi kalau bingung soal mekanik, tanya aku. Kalau soal cara nampilin di layar, itu wilayah kamu.
 
@@ -54,6 +56,15 @@ Kenapa dibikin gini? Biar logika sama tampilan kepisah rapi. Aku bisa otak-atik 
 - **Ekonomi** (`Economy.cs`): semua rumus biaya dan scaling. Kalau kamu butuh tau harga upgrade, jawabannya ada di sini.
 - **Gacha** (`GachaRoller.cs`): nentuin peluang grade mobil pas dirakit.
 
+## Soal balapan: mobil apa aja yang bisa ikut
+
+Ini biar nggak salah paham. Buat balapan, pemain bisa pakai DUA macam mobil:
+
+- **Mobil produksi biasa** (mobil yang sama kayak yang dijual). Mobil ini balap pakai stat dasarnya, dikali bonus dari grade gacha-nya. Jadi mobil model sama tapi grade-nya lebih tinggi bakal lebih kenceng. Mobilnya nggak ilang pas dipakai balapan.
+- **Mobil balap khusus** (Vulcan GT, Thunderbolt R, Hypernova X). Ini dibikin di jalur produksi khusus, stat-nya pasti (nggak ada gacha), dan disimpen terpisah dari stok showroom.
+
+Di sisi logika, dua-duanya udah didukung. Jadi di layar balapan nanti, kamu bisa nampilin pilihan dari mobil balap khusus DAN mobil produksi yang lagi dipunya pemain. Tinggal panggil `StartRace` di Facade dengan id mobil yang dipilih.
+
 ## Yang perlu kamu kerjain di Unity
 
 Ini semacam checklist kasar biar kamu ada gambaran. Nggak harus urut.
@@ -72,4 +83,8 @@ Ini semacam checklist kasar biar kamu ada gambaran. Nggak harus urut.
 - Konten game (item, stasiun, mobil, angka) dibangun langsung di kode lewat `DefaultContent.cs`. Jadi kamu nggak harus bikin file .asset satu-satu biar game-nya jalan.
 - Save pakai PlayerPrefs, ada cek versi. Kalau format save lama nggak cocok, otomatis di-reset biar game nggak error.
 - Mobil yang lagi dipajang di showroom langsung kepotong dari gudang, dan baru kebayar pas kejual. Jadi nggak mungkin satu mobil kejual dua kali.
-- Mobil balap itu beda dari mobil jualan. Mobil balap stat-nya pasti (nggak ada gacha) dan disimpen terpisah, cuma muncul di layar balapan.
+- Kalau mau versi lengkap dan rapi (bahasa Inggris, lebih formal), ada di `docs/GDD.md`. Yang ini versi santai, itu versi detailnya.
+
+## Kalau ada yang bingung
+
+Kalau ada mekanik yang nggak jelas atau angkanya kerasa aneh, jangan diutak-atik sendiri di kode logika. Kabarin aku aja, nanti aku yang benerin di sisi logika. Kamu fokus aja bikin game-nya kelihatan dan kerasa enak dimainin. Makasih ya udah bantu, semoga betah.

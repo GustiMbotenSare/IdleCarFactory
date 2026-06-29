@@ -11,7 +11,7 @@ namespace CarFactoryIdle.Data
     {
         public string id;
         public string displayName;
-        public string icon;        // emoji or sprite key
+        public string icon;        // sprite key or icon name, assigned in Unity
         public ItemKind kind;
         public int tier = 1;       // 1-3 for components
     }

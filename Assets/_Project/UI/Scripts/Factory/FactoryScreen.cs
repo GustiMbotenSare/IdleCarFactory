@@ -63,8 +63,10 @@ namespace CarFactoryIdle.UI
         private void BuildStationList()
         {
             var cfg = GameServices.Facade.Config;
-            StationCategory[] order = { StationCategory.Extractor, StationCategory.Manufacturing, StationCategory.Assembly, StationCategory.Sales };
-            string[] labels = { "Extractors", "Manufacturing", "Assembly", "Sales" };
+            // Filtered to Extractor only for the current build phase. To bring the other categories
+            // back later, restore: { Extractor, Manufacturing, Assembly, Sales } / { "Extractors", ... }.
+            StationCategory[] order = { StationCategory.Extractor };
+            string[] labels = { "Extractors" };
 
             for (int c = 0; c < order.Length; c++)
             {

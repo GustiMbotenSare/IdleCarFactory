@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: GameEventBus
+  m_EditorClassIdentifier: CarFactoryIdle:CarFactoryIdle.Events:GameEventBus
+  cashChanged: {fileID: 11400000, guid: 44f8325e4dbe1214f8897981e62bd098, type: 2}
+  trophiesChanged: {fileID: 11400000, guid: e00bcac109f979546a27e62c522ee6fe, type: 2}
+  carAssembled: {fileID: 11400000, guid: d6e010c3b8fc0e04d82fbe7ececf3d69, type: 2}
+  carSold: {fileID: 11400000, guid: 7cdf3f9c2c3a2ad47a0152332f81c0be, type: 2}
+  raceFinished: {fileID: 11400000, guid: 1c9ee66f6c9e9f84c9c3037e2631872f, type: 2}
+  error: {fileID: 11400000, guid: bbafdf50de8a3d34eb40fd9f21ddcdc9, type: 2}
+  milestone: {fileID: 11400000, guid: 03bf1cae55941b341b262e23b9d4da90, type: 2}
+  contractsRefreshed: {fileID: 11400000, guid: 2272357ae17154848adb72dd9855ee26, type: 2}
+  stateChanged: {fileID: 11400000, guid: 2272357ae17154848adb72dd9855ee26, type: 2}
+  toastRequested: {fileID: 11400000, guid: 27815b11a3635a84b90b2deaf535aa5f, type: 2}

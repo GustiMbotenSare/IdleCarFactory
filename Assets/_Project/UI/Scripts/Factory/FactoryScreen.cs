@@ -62,25 +62,27 @@ namespace CarFactoryIdle.UI
 
         private void BuildStationList()
         {
+            Debug.Log("===== BuildStationList Dipanggil =====");
+
             var cfg = GameServices.Facade.Config;
-            // Filtered to Extractor only for the current build phase. To bring the other categories
-            // back later, restore: { Extractor, Manufacturing, Assembly, Sales } / { "Extractors", ... }.
+
+            Debug.Log("Station Count = " + cfg.stations.Count);
+
             StationCategory[] order = { StationCategory.Extractor };
             string[] labels = { "Extractors" };
 
             for (int c = 0; c < order.Length; c++)
             {
                 var group = cfg.stations.FindAll(s => s.category == order[c]);
-                if (group.Count == 0) continue;
 
-                if (categoryHeaderPrefab != null)
-                {
-                    var header = Instantiate(categoryHeaderPrefab, stationListContent);
-                    header.SetLabel(labels[c]);
-                }
+                Debug.Log($"Category {order[c]} : {group.Count}");
+
+                if (group.Count == 0) continue;
 
                 foreach (var def in group)
                 {
+                    Debug.Log("Spawn : " + def.displayName);
+
                     var row = Instantiate(stationRowPrefab, stationListContent);
                     row.Bind(def);
                     _stationRows.Add(row);

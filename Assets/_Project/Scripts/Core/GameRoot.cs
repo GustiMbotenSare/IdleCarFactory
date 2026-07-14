@@ -50,7 +50,8 @@ namespace CarFactoryIdle.Core
             config.Init();
             _rng = new System.Random();
 
-            State = SaveSystem.Load() ?? NewGame();
+            //State = SaveSystem.Load() ?? NewGame();
+            State = NewGame();
 
             var roller = new GachaRoller(_rng);
             Production = new ProductionSystem(config, State, bus);
@@ -109,6 +110,7 @@ namespace CarFactoryIdle.Core
         public GameState NewGame()
         {
             var s = new GameState();
+            s.wallet.AddCash(10000);
             foreach (var def in config.stations)
             {
                 s.stations.Add(new StationState

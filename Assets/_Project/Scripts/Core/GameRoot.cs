@@ -74,6 +74,7 @@ namespace CarFactoryIdle.Core
 
         private void Update()
         {
+            Debug.Log("GameRoot Running");
             float dt = Time.deltaTime;
             Production.Tick(dt);   // 1. extractors + manufacturing
             Assembly.Tick(dt);     // 2. selected vehicle assembly + gacha

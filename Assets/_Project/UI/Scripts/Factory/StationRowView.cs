@@ -35,22 +35,27 @@ namespace CarFactoryIdle.UI
 
         private void OnActionClicked()
         {
+            Debug.Log($"Tap button clicked : {_stationId}");
             var facade = GameServices.Facade;
             var ss = facade.State.GetStation(_stationId);
             if (ss == null) return;
 
             if (!ss.unlocked) facade.UnlockStation(_stationId);
-            else facade.TapStation(_stationId);
+            //else facade.TapStation(_stationId);
+            else
+            {
+                bool success = facade.TapStation(_stationId);
+                Debug.Log($"Tap result = {success}");
+            }
+            Debug.Log($"Inventory {_def.outputItemId} = {facade.State.inventory.Get(_def.outputItemId)}");
         }
 
         private void Update()
         {
-            if (_def == null) return;
+            if (_def == null)
+                return;
 
-            var ss = GameServices.Facade.State.GetStation(_stationId);
-
-            if (ss != null && progressBar != null)
-                progressBar.value = ss.progress;
+            Refresh();
         }   
 
         public void Refresh()

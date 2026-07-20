@@ -8,28 +8,28 @@ using CarFactoryIdle.Events;
 
 namespace CarFactoryIdle.UI
 {
-    /// <summary>Top-level controller for the Factory/Production screen: builds the station list and
-    /// vehicle picker once from GameFacade.Config, then refreshes every row on the stateChanged event.
-    /// No game rules live here — every action forwards straight to GameFacade.
-    ///
-    /// Vehicle picker and Factory tier fields are optional — leave them unassigned if your scene
-    /// isn't wired up to them yet (e.g. while working on the extractor-only slice first).</summary>
+    /// <summary>
+    /// Top-level controller for the Factory/Production screen.
+    /// Builds the station list and vehicle picker from GameFacade.Config,
+    /// then refreshes every UI element whenever the game state changes.
+    /// </summary>
     public class FactoryScreen : MonoBehaviour
     {
-        [Header("Station list")]
+        [Header("Station List")]
         [SerializeField] private Transform stationListContent;
         [SerializeField] private StationRowView stationRowPrefab;
         [SerializeField] private CategoryHeaderView categoryHeaderPrefab;
 
-        [Header("Vehicle picker (optional)")]
+        [Header("Vehicle Picker (Optional)")]
         [SerializeField] private Transform vehicleListContent;
         [SerializeField] private VehicleOptionView vehicleOptionPrefab;
         [SerializeField] private Button buildButton;
 
-        [Header("Factory tier (optional)")]
-        [SerializeField] private TMP_Text tierNameText;
-        [SerializeField] private Button nextTierButton;
-        [SerializeField] private TMP_Text nextTierCostText;
+        [Header("Factory Tier")]
+        [SerializeField] private TMP_Text factoryTierText;
+        [SerializeField] private TMP_Text productionBonusText;
+        [SerializeField] private Button factoryUpgradeButton;
+        [SerializeField] private TMP_Text factoryUpgradeButtonText;
 
         [Header("Events")]
         [SerializeField] private VoidEventChannel stateChanged;
@@ -39,25 +39,104 @@ namespace CarFactoryIdle.UI
 
         private void Start()
         {
+            Debug.Log("========== FactoryScreen Start ==========");
+            Debug.Log("FactoryScreen Object : " + gameObject.name);
+            Debug.Log("FactoryScreen InstanceID : " + GetInstanceID());
+
             BuildStationList();
-            if (vehicleListContent != null && vehicleOptionPrefab != null) BuildVehicleList();
+
+            if (vehicleListContent != null && vehicleOptionPrefab != null)
+                BuildVehicleList();
 
             if (buildButton != null)
-                buildButton.onClick.AddListener(() => GameServices.Facade.BuildSelectedOnce());
-            if (nextTierButton != null)
-                nextTierButton.onClick.AddListener(() => GameServices.Facade.BuyNextFactoryTier());
+            {
+                buildButton.onClick.RemoveAllListeners();
+                buildButton.onClick.AddListener(() =>
+                {
+                    Debug.Log("Build Button Clicked");
+                    GameServices.Facade.BuildSelectedOnce();
+                });
+            }
+
+            if (factoryUpgradeButton == null)
+            {
+                Debug.LogError("Factory Upgrade Button NULL");
+            }
+            else
+            {
+                Debug.Log("Factory Upgrade Button = " + factoryUpgradeButton.name);
+                Debug.Log("Button InstanceID = " + factoryUpgradeButton.GetInstanceID());
+
+                factoryUpgradeButton.onClick.RemoveAllListeners();
+
+                factoryUpgradeButton.onClick.AddListener(() =>
+                {
+                    Debug.Log("===== LAMBDA CLICK =====");
+                });
+
+                factoryUpgradeButton.onClick.AddListener(OnFactoryUpgradeClicked);
+
+                Debug.Log("Factory listener registered.");
+            }
 
             RefreshAll();
         }
 
         private void OnEnable()
         {
-            if (stateChanged != null) stateChanged.Subscribe(RefreshAll);
+            if (stateChanged != null)
+                stateChanged.Subscribe(RefreshAll);
         }
 
         private void OnDisable()
         {
-            if (stateChanged != null) stateChanged.Unsubscribe(RefreshAll);
+            if (stateChanged != null)
+                stateChanged.Unsubscribe(RefreshAll);
+        }
+
+        public void OnFactoryUpgradeClicked()
+        {
+            Debug.Log("===== OnFactoryUpgradeClicked =====");
+
+            GameServices.Facade.BuyNextFactoryTier();
+            RefreshFactory();
+        }
+
+        private void RefreshFactory()
+        {
+            var facade = GameServices.Facade;
+
+            var currentTier =
+                facade.Config.GetFactoryTier(facade.State.factoryTierIndex);
+
+            var nextTier = facade.NextFactoryTier();
+
+            Debug.Log(nextTier == null ? "No Next Tier" : "Next Tier Found");
+
+            if (factoryTierText != null)
+                factoryTierText.text = currentTier.displayName;
+
+            if (productionBonusText != null)
+            {
+                productionBonusText.text =
+                    $"Production x{facade.Config.ProductionMultiplier(facade.State.factoryTierIndex):0.00}";
+            }
+
+            if (factoryUpgradeButton == null || factoryUpgradeButtonText == null)
+                return;
+
+            if (nextTier == null)
+            {
+                factoryUpgradeButton.interactable = false;
+                factoryUpgradeButtonText.text = "MAX";
+            }
+            else
+            {
+                factoryUpgradeButton.interactable = true;
+                factoryUpgradeButtonText.text =
+                    $"Upgrade {NumberFormat.Currency(nextTier.cost)}";
+            }
+            
         }
 
         private void BuildStationList()
@@ -68,8 +147,15 @@ namespace CarFactoryIdle.UI
 
             Debug.Log("Station Count = " + cfg.stations.Count);
 
-            StationCategory[] order = { StationCategory.Extractor };
-            string[] labels = { "Extractors" };
+            StationCategory[] order =
+            {
+                StationCategory.Extractor
+            };
+
+            string[] labels =
+            {
+                "Extractors"
+            };
 
             for (int c = 0; c < order.Length; c++)
             {
@@ -77,7 +163,8 @@ namespace CarFactoryIdle.UI
 
                 Debug.Log($"Category {order[c]} : {group.Count}");
 
-                if (group.Count == 0) continue;
+                if (group.Count == 0)
+                    continue;
 
                 foreach (var def in group)
                 {
@@ -93,33 +180,26 @@ namespace CarFactoryIdle.UI
         private void BuildVehicleList()
         {
             var cfg = GameServices.Facade.Config;
-            foreach (var v in cfg.vehicles)
+
+            foreach (var vehicle in cfg.vehicles)
             {
-                var opt = Instantiate(vehicleOptionPrefab, vehicleListContent);
-                opt.Bind(v);
-                _vehicleOptions.Add(opt);
+                var option =
+                    Instantiate(vehicleOptionPrefab, vehicleListContent);
+
+                option.Bind(vehicle);
+                _vehicleOptions.Add(option);
             }
         }
 
         private void RefreshAll()
         {
-            foreach (var row in _stationRows) row.Refresh();
-            foreach (var opt in _vehicleOptions) opt.Refresh();
+            foreach (var row in _stationRows)
+                row.Refresh();
 
-            var facade = GameServices.Facade;
+            foreach (var option in _vehicleOptions)
+                option.Refresh();
 
-            if (tierNameText != null)
-            {
-                var tier = facade.Config.GetFactoryTier(facade.State.factoryTierIndex);
-                tierNameText.text = tier != null ? $"Tier {tier.tier}: {tier.displayName}" : "-";
-            }
-
-            if (nextTierButton != null)
-            {
-                var next = facade.NextFactoryTier();
-                nextTierButton.gameObject.SetActive(next != null);
-                if (next != null && nextTierCostText != null) nextTierCostText.text = NumberFormat.Currency(next.cost);
-            }
+            RefreshFactory();
         }
     }
 }
